@@ -77,17 +77,44 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
+-- Table `LittleLemonDB`.`Items`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `LittleLemonDB`.`Items` ;
+
+CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Items` (
+  `ItemID` INT NOT NULL,
+  `Name` VARCHAR(150) NOT NULL,
+  PRIMARY KEY (`ItemID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `LittleLemonDB`.`MenuItems`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `LittleLemonDB`.`MenuItems` ;
 
 CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`MenuItems` (
-  `ItemID` INT NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(150) NOT NULL,
-  `Cuisine` VARCHAR(150) NOT NULL,
-  `Type` VARCHAR(150) NOT NULL,
+  `MenuItemID` INT NOT NULL AUTO_INCREMENT,
+  `StarterID` INT NOT NULL,
+  `CourseID` INT NOT NULL,
+  `DesertID` INT NULL,
   `Price` DECIMAL NOT NULL,
-  PRIMARY KEY (`ItemID`))
+  PRIMARY KEY (`MenuItemID`),
+  CONSTRAINT `fk_MenuItems_Items1`
+    FOREIGN KEY (`StarterID`)
+    REFERENCES `LittleLemonDB`.`Items` (`ItemID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_MenuItems_Items2`
+    FOREIGN KEY (`CourseID`)
+    REFERENCES `LittleLemonDB`.`Items` (`ItemID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_MenuItems_Items3`
+    FOREIGN KEY (`DesertID`)
+    REFERENCES `LittleLemonDB`.`Items` (`ItemID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
@@ -111,6 +138,7 @@ CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Orders` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
+
 -- -----------------------------------------------------
 -- Table `LittleLemonDB`.`OrderStatus`
 -- -----------------------------------------------------
@@ -130,26 +158,46 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `LittleLemonDB`.`Menus`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `LittleLemonDB`.`Menus` ;
+
+CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Menus` (
+  `MenuID` INT NOT NULL,
+  `Name` VARCHAR(255) NOT NULL,
+  `MenusItemsID` INT NULL,
+  `Cuisine` VARCHAR(150) NOT NULL,
+  PRIMARY KEY (`MenuID`),
+  CONSTRAINT `fk_Menus_MenuItems1`
+    FOREIGN KEY (`MenusItemsID`)
+    REFERENCES `LittleLemonDB`.`MenuItems` (`MenuItemID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `LittleLemonDB`.`OrderItems`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `LittleLemonDB`.`OrderItems` ;
 
 CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`OrderItems` (
   `OrderID` INT NOT NULL,
-  `ItemID` INT NOT NULL,
+  `MenuID` INT NOT NULL,
   `Quantity` INT NOT NULL,
-  PRIMARY KEY (`OrderID`, `ItemID`),
+  PRIMARY KEY (`OrderID`, `MenuID`),
   CONSTRAINT `fk_OrderItems_Orders1`
     FOREIGN KEY (`OrderID`)
     REFERENCES `LittleLemonDB`.`Orders` (`OrderID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_OrderItems_MenuItems1`
-    FOREIGN KEY (`ItemID`)
-    REFERENCES `LittleLemonDB`.`MenuItems` (`ItemID`)
+  CONSTRAINT `fk_OrderItems_Menus1`
+    FOREIGN KEY (`MenuID`)
+    REFERENCES `LittleLemonDB`.`Menus` (`MenuID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
