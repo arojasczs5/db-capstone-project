@@ -58,8 +58,7 @@ DROP TABLE IF EXISTS `LittleLemonDB`.`Bookings` ;
 CREATE TABLE IF NOT EXISTS `LittleLemonDB`.`Bookings` (
   `BookingID` INT NOT NULL AUTO_INCREMENT,
   `TableNo` TINYINT NOT NULL,
-  `BookingDate` DATE NOT NULL,
-  `BookingSlot` TIME NOT NULL,
+  `Date` DATE NOT NULL,
   `StaffID` INT NOT NULL,
   `CustomerID` INT NOT NULL,
   PRIMARY KEY (`BookingID`),
