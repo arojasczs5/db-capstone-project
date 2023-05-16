@@ -14,8 +14,7 @@ USE `littlelemondb`;
 CREATE TABLE IF NOT EXISTS `bookings` (
   `BookingID` int(11) NOT NULL AUTO_INCREMENT,
   `TableNo` tinyint(4) NOT NULL,
-  `BookingDate` date NOT NULL,
-  `BookingSlot` time NOT NULL,
+  `Date` date NOT NULL,
   `StaffID` int(11) NOT NULL,
   `CustomerID` int(11) NOT NULL,
   PRIMARY KEY (`BookingID`),
@@ -25,11 +24,11 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   CONSTRAINT `fk_Bookings_Staff` FOREIGN KEY (`StaffID`) REFERENCES `staff` (`StaffID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `bookings` (`BookingID`, `TableNo`, `BookingDate`, `BookingSlot`, `StaffID`, `CustomerID`) VALUES
-	(1, 1, '2023-12-04', '09:30:00', 4, 1),
-	(2, 2, '2023-12-05', '07:30:00', 1, 2),
-	(3, 5, '2023-12-05', '09:30:00', 5, 3),
-	(4, 1, '2023-12-05', '09:30:00', 1, 1);
+INSERT INTO `bookings` (`BookingID`, `TableNo`, `Date`, `StaffID`, `CustomerID`) VALUES
+	(1, 1, '2023-12-04', 4, 1),
+	(2, 2, '2023-12-05', 1, 2),
+	(3, 5, '2023-12-05', 5, 3),
+	(4, 1, '2023-12-05', 1, 1);
 
 DELIMITER //
 CREATE PROCEDURE `CancelOrder`(IN anOrderID INT)
